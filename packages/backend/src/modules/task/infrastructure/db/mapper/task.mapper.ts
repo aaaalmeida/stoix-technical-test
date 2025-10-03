@@ -6,7 +6,7 @@ export class TaskMapper {
         return task.toPersistence()
     }
 
-    static toDomain(doc: Partial<TaskDocument>): Task {
+    static toDomain(doc: TaskDocument): Task {
         const id = doc._id?.toString ? doc._id.toString() : String(doc._id)
 
         return Task.fromPersistence({

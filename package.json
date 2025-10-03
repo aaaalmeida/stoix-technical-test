@@ -1,6 +1,9 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "start:backend": "npx lerna run start:dev --scope backend"
+  },
   "workspaces": [
     "packages/*"
   ],

@@ -4,19 +4,22 @@ import { Task } from "src/modules/task/domain/model/task";
 import { TaskDocument } from "../schema/task.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { TaskMapper } from "../mapper/task.mapper";
-import { Logger } from "@nestjs/common";
+import { Logger, NotFoundException } from "@nestjs/common";
 
 export class TaskRepositoryImpl implements TaskRepository {
     private readonly logger: Logger = new Logger(TaskRepositoryImpl.name)
 
     constructor(@InjectModel("Task") private readonly taskModel: Model<TaskDocument>) { }
 
+    async findById(id: string): Promise<Task> {
+        const persistence = await this.taskModel.findById(id)
+        if (!persistence) throw new NotFoundException()
+        return TaskMapper.toDomain(persistence)
+    }
+
     async create(task: Task): Promise<Task> {
-        this.logger.log(task)
         const persistence = TaskMapper.toPersistence(task)
-        this.logger.log(persistence)
         const created = await this.taskModel.create(persistence)
-        this.logger.log(created)
         return TaskMapper.toDomain(created)
     }
 

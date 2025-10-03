@@ -5,4 +5,5 @@ export interface TaskRepository {
     deleteById(id: string): Promise<void>
     getAll(): Promise<Task[]>
     update(id: string, updatedTask: Partial<Task>): Promise<Task>
+    findById(id: string): Promise<Task>
 }
