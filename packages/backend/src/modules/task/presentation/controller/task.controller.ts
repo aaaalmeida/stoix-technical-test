@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Logger, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Logger, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateTaskUseCase } from 'src/modules/task/application/usecase/createTask.usecase';
@@ -11,6 +11,7 @@ import { InvalidTaskNameException } from 'src/shared/exception/invalidTaskName.e
 import { DeleteTaskByIdUseCase } from '../../application/usecase/deleteTaskById.usecase';
 import { InvalidUuidException } from 'src/shared/exception/invalidUuid.exception';
 import { FindTaskByIdUseCase } from '../../application/usecase/findTaskById.usecase';
+import { UpdateTaskByIdUseCase } from '../../application/usecase/updateTaskById.usecase';
 
 @Controller("/task")
 export class TaskController {
@@ -28,7 +29,7 @@ export class TaskController {
         try {
             const getAllTasksUseCase = new GetAllTasksUseCase(this.taskRepository)
             const response = await getAllTasksUseCase.execute()
-            return response 
+            return response
         } catch (e) {
             throw new BadRequestException(e)
         }
@@ -64,6 +65,20 @@ export class TaskController {
         } catch (e) {
             if (e instanceof InvalidUuidException) throw new BadRequestException(e)
             throw e
+        }
+    }
+
+    @Patch(":id")
+    async updateById(
+        @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
+        @Body() body: { taskname?: string, description?: string }
+    ) {
+        try {
+            const updateTaskByIdUseCase = new UpdateTaskByIdUseCase(this.taskRepository)
+            return await updateTaskByIdUseCase.execute(id, body)
+        } catch (e) {
+            if (e instanceof InvalidUuidException) throw new BadRequestException(e)
+
         }
     }
 }

@@ -29,12 +29,13 @@ export class TaskRepositoryImpl implements TaskRepository {
     }
 
     async deleteById(id: string): Promise<void> {
-        await this.taskModel.deleteOne({ _id: id }).exec()
+        await this.taskModel.findByIdAndDelete(id).exec()
     }
 
     async update(id: string, updatedTask: Partial<Task>): Promise<Task> {
-        // retorna novo obj
-        const updated = await this.taskModel.findByIdAndUpdate(id, updatedTask, { new: true }).exec()
+        // retorna obj depois de atualizar
+        const updated = await this.taskModel
+            .findByIdAndUpdate(id, updatedTask, { returnDocument: "after" }).lean().exec()
 
         if (!updated) throw new Error("Task not found")
         return TaskMapper.toDomain(updated)
