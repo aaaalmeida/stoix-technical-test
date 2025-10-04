@@ -1,0 +1,37 @@
+:root {
+  /* Paleta clara (default) */
+  --bg: #F5F5F0;
+  --card: #fff;
+  --accent: #5D866C;
+  --accent-hover: #476b54;
+  --border: #9e8065;
+  --text: #333;
+}
+
+.theme-dark {
+    /* Paleta escura */
+  --bg: #121212;
+  --card: #1E1E1E;
+  --accent: #5DA683;
+  --accent-hover: #4C8B6E;
+  --border: #2C3E50;
+  --text: #E0E0E0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+}
+
+#dark-theme-button {
+  border-radius: 20px;
+  padding: 4px;
+  border: 2px solid var(--border);
+}
+
+#dark-theme-button img {
+  width: 32px;
+  height: 32px;
+}

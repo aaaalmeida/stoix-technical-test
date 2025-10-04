@@ -1,26 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useState } from "react"
+import { TaskPage } from "./pages/taskpage/taskPage"
+import SunIcon from "./assets/sun.svg"
+import MoonIcon from "./assets/moon.svg"
+import { ToastContainer } from "react-toastify"
 
-function App() {
-  const [msg, setMsg] = useState<string>("")
-
-  useEffect(() => {
-    fetch("/api/hello")
-      .then(res => {
-        console.log(res)
-        return res.json()})
-      .then(data => {
-        // console.log(data)
-        setMsg(data.message)
-      })
-      .catch(e => console.log(e))
-
-  }, [])
+const App = () => {
+  const [darkTheme, setDarkTheme] = useState<boolean>(false)
 
   return (
-    <>
-      <h1>DEU CERTO</h1>
-      <h1>{msg ?? "vazio"}</h1>
-    </>
+    <div className={darkTheme ? "theme-dark" : ""}>
+      <button id="dark-theme-button" onClick={() => setDarkTheme(!darkTheme)}>
+        <img src={darkTheme ? MoonIcon : SunIcon} />
+      </button>
+      <TaskPage />
+      <ToastContainer hideProgressBar={true} pauseOnHover={false} />
+    </div>
   )
 }
 

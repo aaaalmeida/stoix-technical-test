@@ -2,7 +2,9 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "start:backend": "npx lerna run start:dev --scope backend"
+    "start:dev": "npx lerna run --parallel start:dev --scope backend --scope frontend",
+    "start:backend": "npx lerna run start:dev --scope backend",
+    "start:frontend": "npx lerna run start:dev --scope frontend"
   },
   "workspaces": [
     "packages/*"
