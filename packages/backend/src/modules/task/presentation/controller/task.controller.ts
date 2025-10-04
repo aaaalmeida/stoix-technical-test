@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Logger, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Logger, Param, ParseUUIDPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateTaskUseCase } from 'src/modules/task/application/usecase/createTask.usecase';
@@ -12,6 +12,7 @@ import { DeleteTaskByIdUseCase } from '../../application/usecase/deleteTaskById.
 import { InvalidUuidException } from 'src/shared/exception/invalidUuid.exception';
 import { FindTaskByIdUseCase } from '../../application/usecase/findTaskById.usecase';
 import { UpdateTaskByIdUseCase } from '../../application/usecase/updateTaskById.usecase';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller("/task")
 export class TaskController {
@@ -24,6 +25,7 @@ export class TaskController {
         this.taskRepository = new TaskRepositoryImpl(taskModel)
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Get()
     async findAll(): Promise<Task[]> {
         try {
@@ -35,6 +37,7 @@ export class TaskController {
         }
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Get(":id")
     async findById(@Param("id", new ParseUUIDPipe({ version: "4" })) id: string): Promise<Task> {
         try {
@@ -46,6 +49,7 @@ export class TaskController {
         }
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Post()
     async create(@Body() body: { taskname: string, description?: string }) {
         try {
@@ -57,6 +61,7 @@ export class TaskController {
         }
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Delete(":id")
     async deleteById(@Param("id", new ParseUUIDPipe({ version: "4" })) id: string) {
         try {
@@ -68,6 +73,7 @@ export class TaskController {
         }
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Patch(":id")
     async updateById(
         @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,

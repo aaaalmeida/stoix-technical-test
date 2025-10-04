@@ -2,6 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
+    "build": "npx lerna run --parallel build --scope backend --scope frontend",
     "start:dev": "npx lerna run --parallel start:dev --scope backend --scope frontend",
     "start:backend": "npx lerna run start:dev --scope backend",
     "start:frontend": "npx lerna run start:dev --scope frontend"
@@ -13,6 +14,11 @@
     "lerna": "^9.0.0"
   },
   "dependencies": {
-    "dotenv": "^17.2.3"
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/passport": "^11.0.5",
+    "@types/passport-jwt": "^4.0.1",
+    "dotenv": "^17.2.3",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1"
   }
 }

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
 import type { ITask } from "../../types/ITask"
-import { createTask, getAllTasks, updateTask } from "../../service/taskService"
+import { createTask, deleteTaskById, getAllTasks, updateTask } from "../../service/taskService"
 import { TaskForm } from "../../components/task.form"
 import { TaskTable } from "../../components/task.table"
 import "./style.css"
 import { toast } from "react-toastify"
 import { isPositiveStatusCode } from "../../utils/isPositiveStatusCode"
+import { LoginForm } from "../../components/login.form"
 
 
 export const TaskPage = () => {
@@ -14,8 +15,7 @@ export const TaskPage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            // TODO
-            await getAllTasks("")
+            await getAllTasks()
                 .then(res => {
                     if (isPositiveStatusCode(res.status)) setTasks(res.data)
                     else toast("Não foi possivel carregar as tarefas :(")
@@ -27,8 +27,7 @@ export const TaskPage = () => {
 
     const toggleTask = async (task: ITask) => {
         const updated = { ...task, completed: !task.completed }
-        // TODO
-        const res = await updateTask("", task.id, updated)
+        const res = await updateTask(task.id, updated)
 
         if (isPositiveStatusCode(res.status)) {
             setTasks(prev =>
@@ -37,21 +36,26 @@ export const TaskPage = () => {
         } else toast("Não foi possível atualizar a tarefa :(")
     }
 
-    async function handleAdd(taskname: string, description?: string) {
-        // TODO
-        const res = await createTask("", {
+    const handleAdd = async (taskname: string, description?: string) => {
+        const res = await createTask({
             taskname,
             completed: false,
             description,
         })
         if (isPositiveStatusCode(res.status)) setTasks((prev) => [...prev, res.data])
-        else toast("Não foi possivel adicionar uma tarefa\n")
+        else toast("Não foi possivel adicionar uma tarefa")
+    }
+
+    const handleDelete = async (id: string) => {
+        const res = await deleteTaskById(id)
+        if (isPositiveStatusCode(res.status)) {
+            setTasks(prev => prev.filter(t => t.id !== id))
+        }
+        else toast("Não foi possivel remover essa tarefa")
     }
 
     const updateField = async (task: ITask) => {
-        // TODO
-        const res = await updateTask("", task.id, task)
-
+        const res = await updateTask(task.id, task)
         if (isPositiveStatusCode(res.status)) {
             setTasks(prev => prev.map(t => (t.id === task.id ? res.data : t)))
         }
@@ -59,9 +63,14 @@ export const TaskPage = () => {
 
     return (
         <div id="task-page">
+            <LoginForm />
             <h2>Lista de Tarefas</h2>
             <TaskForm onSubmit={handleAdd} />
-            <TaskTable tasks={tasks} onToggle={toggleTask} onUpdate={updateField} />
+            <TaskTable
+                tasks={tasks}
+                onToggle={toggleTask}
+                onUpdate={updateField}
+                onDelete={handleDelete} />
         </div>
     )
 }

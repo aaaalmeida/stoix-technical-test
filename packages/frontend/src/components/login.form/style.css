@@ -1,0 +1,13 @@
+#login-form{
+    display: flex;
+    flex-direction: column;
+}
+
+form>div{
+    margin: 10px 0;
+}
+
+aside{
+    font-size: small;
+    color: red;
+}

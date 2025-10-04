@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { TaskPage } from "./pages/taskpage/taskPage"
+import { TaskPage } from "./pages/taskpage"
 import SunIcon from "./assets/sun.svg"
 import MoonIcon from "./assets/moon.svg"
 import { ToastContainer } from "react-toastify"

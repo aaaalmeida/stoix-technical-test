@@ -7,9 +7,10 @@ interface ITaskTableProps {
     tasks: ITask[]
     onToggle: (task: ITask) => Promise<void>
     onUpdate: (task: ITask) => void
+    onDelete: (id: string) => void
 }
 
-export const TaskTable = ({ tasks, onToggle, onUpdate }: ITaskTableProps) => {
+export const TaskTable = ({ tasks, onToggle, onUpdate, onDelete }: ITaskTableProps) => {
     const handleChange = (task: ITask, field: keyof ITask, value: string) => {
         onUpdate({ ...task, [field]: value })
     }
@@ -22,6 +23,7 @@ export const TaskTable = ({ tasks, onToggle, onUpdate }: ITaskTableProps) => {
                         <th>ATIVIDADE</th>
                         <th>COMPLETADA</th>
                         <th>DESCRIÇÃO</th>
+                        <th>APAGAR TAREFA?</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,6 +45,11 @@ export const TaskTable = ({ tasks, onToggle, onUpdate }: ITaskTableProps) => {
                                     value={task.description}
                                     onChange={(e) => handleChange(task, "description", e.target.value)}
                                     onBlur={() => onUpdate(task)} />
+                            </th>
+                            <th>
+                                <button onClick={() => onDelete(task.id)}>
+                                    X
+                                </button>
                             </th>
                         </tr >
                     )}
