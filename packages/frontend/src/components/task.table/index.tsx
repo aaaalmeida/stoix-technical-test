@@ -6,9 +6,14 @@ import NegativeIcon from "./negativeIcon.svg"
 interface ITaskTableProps {
     tasks: ITask[]
     onToggle: (task: ITask) => Promise<void>
+    onUpdate: (task: ITask) => void
 }
 
-export function TaskTable({ tasks, onToggle }: ITaskTableProps) {
+export const TaskTable = ({ tasks, onToggle, onUpdate }: ITaskTableProps) => {
+    const handleChange = (task: ITask, field: keyof ITask, value: string) => {
+        onUpdate({ ...task, [field]: value })
+    }
+
     return (
         <>
             <table>
@@ -22,13 +27,23 @@ export function TaskTable({ tasks, onToggle }: ITaskTableProps) {
                 <tbody>
                     {tasks.map((task, index) =>
                         <tr key={"tr-" + index}>
-                            <th>{task.taskname}</th>
+                            <th>
+                                <input
+                                    value={task.taskname}
+                                    onChange={(e) => handleChange(task, "taskname", e.target.value)}
+                                    onBlur={() => onUpdate(task)} />
+                            </th>
                             <th>
                                 <button onClick={() => onToggle(task)}>
                                     <img src={task.completed ? PositiveIcon : NegativeIcon} />
                                 </button>
                             </th>
-                            <th>{task.description}</th>
+                            <th>
+                                <input
+                                    value={task.description}
+                                    onChange={(e) => handleChange(task, "description", e.target.value)}
+                                    onBlur={() => onUpdate(task)} />
+                            </th>
                         </tr >
                     )}
                 </tbody>

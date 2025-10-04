@@ -14,7 +14,8 @@ export const TaskPage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            getAllTasks(token)
+            // TODO
+            await getAllTasks("")
                 .then(res => {
                     if (isPositiveStatusCode(res.status)) setTasks(res.data)
                     else toast("Não foi possivel carregar as tarefas :(")
@@ -26,6 +27,7 @@ export const TaskPage = () => {
 
     const toggleTask = async (task: ITask) => {
         const updated = { ...task, completed: !task.completed }
+        // TODO
         const res = await updateTask("", task.id, updated)
 
         if (isPositiveStatusCode(res.status)) {
@@ -36,6 +38,7 @@ export const TaskPage = () => {
     }
 
     async function handleAdd(taskname: string, description?: string) {
+        // TODO
         const res = await createTask("", {
             taskname,
             completed: false,
@@ -45,11 +48,20 @@ export const TaskPage = () => {
         else toast("Não foi possivel adicionar uma tarefa\n")
     }
 
+    const updateField = async (task: ITask) => {
+        // TODO
+        const res = await updateTask("", task.id, task)
+
+        if (isPositiveStatusCode(res.status)) {
+            setTasks(prev => prev.map(t => (t.id === task.id ? res.data : t)))
+        }
+    }
+
     return (
         <div id="task-page">
             <h2>Lista de Tarefas</h2>
             <TaskForm onSubmit={handleAdd} />
-            <TaskTable tasks={tasks} onToggle={toggleTask} />
+            <TaskTable tasks={tasks} onToggle={toggleTask} onUpdate={updateField} />
         </div>
     )
 }

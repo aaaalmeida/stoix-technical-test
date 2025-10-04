@@ -23,6 +23,7 @@ body {
   color: var(--text);
   margin: 0;
   font-family: "Segoe UI", sans-serif;
+  padding: 20px;
 }
 
 #dark-theme-button {
