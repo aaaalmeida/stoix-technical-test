@@ -3,9 +3,11 @@
   "private": true,
   "scripts": {
     "build": "npx lerna run --parallel build --scope backend --scope frontend",
+    "build:backend": "npx lerna run build --scope backend",
     "start:dev": "npx lerna run --parallel start:dev --scope backend --scope frontend",
     "start:backend": "npx lerna run start:dev --scope backend",
-    "start:frontend": "npx lerna run start:dev --scope frontend"
+    "start:frontend": "npx lerna run start:dev --scope frontend",
+    "start:prod:backend": "npx lerna run start:prod --scope backend"
   },
   "workspaces": [
     "packages/*"
